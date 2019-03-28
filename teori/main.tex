@@ -1,0 +1,188 @@
+\documentclass[12pt]{article}
+
+\input{setup}
+
+\title{Initialverdi-oppgåver}
+
+\newcommand{\subtask}[1]{{\bf #1.}}
+
+\definecolor{ThemeBG}{HTML}{C1DCBD}
+\definecolor{ThemeFrame}{HTML}{000000}
+
+\begin{document}
+\maketitle
+\begin{multicols*}{2}\noindent % somehow the first line is indented...
+    \section{Diffusjonslikninga}
+    Gitt initialverdiproblemet
+    \begin{equation}
+        \phi(x, 0) = \delta(x - x_0)
+        \label{phi0}
+    \end{equation}
+    \begin{equation}
+        \deldel{\phi}{t} = D\deldelN{\phi}{x}{2}
+        \label{diffusion}
+    \end{equation}
+    vil vi finne $\phi(x, t)$.
+    Eg går ut frå at $x_0 = 0$.
+    Dette går bra: So lenge ingen potensial er til stades
+    vil det same skje med ei fordeling om $x = x_0$ som med den
+    same fordelinga om $x = 0$, så vi kan berre flytte
+    koordinatane i etterkant.
+
+    Vi treng hugse nokre få ting.
+    Fourier-framstilling av $\delta$-funksjonen:
+    \begin{equation}
+        \delta(x) = \frac{1}{2\pi}
+        \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
+        \D k e^{-ikx} \text.
+        \label{deltafn}
+    \end{equation}
+    Taylor-utvikling av $\phi$ om $t = 0$:
+    \begin{equation}
+        \phi(x, t) = \sum_{n = 0}^\infty
+        \frac{t^n}{n!} \cdot \smashoperator{\Sub\limits_{t = 0}} \deldelN{\phi}{t}{n}
+        \text.
+        \label{tay}
+    \end{equation}
+    Leibniz' integral-regel:
+    \begin{equation}
+        \dd{}{x} \left[\;
+            \smashoperator[r]{\int\limits_{k=a}^{k=b}} f(x, k) \D k
+        \right]
+        =
+        \smashoperator[r]{\int\limits_{k=a}^{k=b}} \deldel{f}{x} \D k
+        \text.
+        \label{papa}
+    \end{equation}
+    (bytte om rekkefølga på derivasjon og integrasjon,
+     so lenge integrasjonsgrensene er uavhengige av
+     variablen vi deriverer med omsyn til)
+     Frå \eqref{diffusion} og \eqref{phi0} har vi:
+    \begin{equation}
+        \deldelN{\phi}{t}{n} = D^n \deldelN{\phi}{x}{2n}
+        \;\text;\quad
+        \smashoperator{\Sub\limits_{t=0}} \deldelN{\phi}{t}{n}
+        = D^n \deldelN{}{x}{2n} \delta(x)
+        \text,
+        \label{diffusionN}
+    \end{equation}
+    som er det siste vi kjem til å få bruk for.
+
+    \subsection*{Integral-framstilling}
+    Skriv om \eqref{tay} v. h. a. \eqref{diffusionN}:
+    \[
+        \phi(x, t) = \sum_{n = 0}^\infty
+        \frac{t^n}{n!} \left[ D^n \deldelN{}{x}{2n} \delta(x) \right]
+    \]
+    Utvid $\delta(x)$ v. h. a. \eqref{deltafn},
+    og bytt integrasjon- og derivasjonsrekkefølgje. \eqref{papa}
+    Eg droppar å skrive grensene; dei endrar seg ikkje.
+    \begin{align*}
+        \phi(x, t) &= \sum \left[
+        \frac{t^n}{n!} \frac{1}{2\pi} D^n \int
+    \D k \deldelN{}{x}{2n} e^{-ikx} \right] \\
+                   &= \frac{1}{2\pi} \sum \left[ \int \D k \frac{t^n}{n!} D^n (-ik)^{2n} e^{-ikx} \right] \\
+                   &= \frac{1}{2\pi} \int \D k e^{-ikx} \sum \left[ \frac{\left(-Dtk^2\right)^n}{n!} \right]\\
+                   &= \frac{1}{2\pi} \int \D k e^{-ikx} e^{-Dtk^2}
+    \end{align*}
+    Skriv på grensene, og gjer koordinatskiftet:
+    \begin{equation}
+        \phi(x, t) = \frac{1}{2\pi}
+        \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
+                \D k e^{-ik(x - x_0)} e^{-Dtk^2}
+        \label{phi_int}
+    \end{equation}
+
+    \subsection*{Normalfordeling}
+    Vil evaluere integralet \eqref{phi_int}.
+    \begin{align}
+    \begin{split}
+        \phi(x, t) &= \frac{1}{2\pi}
+        \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
+                \D k e^{-ik(x - x_0)} e^{-Dtk^2} \\
+                   &= \frac{1}{2\pi}
+        \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
+        \D k e^{-(ak^2 + 2bk)} \:\text;\:
+        \begin{array}{l} a = Dt \\  b = \frac{i}{2}(x - x_0) \end{array} \\
+                   &\stackrel{\satan}{=} \frac{1}{2\pi} \sqrt{\frac{\pi}{a}} \exp \left(\frac{b^2}{a} \right) \\
+                   &= \frac{1}{\sqrt{4\pi D t}} \exp \left( -\frac{(x - x_0)^2}{4 D t} \right)
+    \end{split}\label{gauss}
+    \end{align}
+    Som er det vi skulle vise. (\satan) er frå Rottmann.
+
+    \subsection*{Fysisk tolkning av diffusjonskoeffisienten}
+    Tolkar vi \eqref{gauss} som ein sannsynstettleik, er
+    variansen til tettleiken $\sigma^2 = 2Dt$.
+    Fordelinga vert med andre ord {\em flatare} etter kvart
+    som tida går framover, og jo høgare $D$ er, jo raskare
+    skjer utflatinga.
+    $D$ må derfor tolkast som {\em ``farten''} til diffusjonsprosessen.
+
+    \subsection*{Tidsutvikling av vilkårleg initialverdi}
+    Vil løyse initialverdiproblemet
+    \begin{equation}
+        \phi(x, 0) = g(x)
+        \label{generisk_phi0}
+    \end{equation}
+    og \eqref{diffusion}. Med andre ord betraktar vi vilkårlege
+    initialverdiar.
+    Eg ser ikkje korleis vi kan bruke hintet på en ``enkel og grei måte'',
+    så eg brukar ein betre måte. (:-)) Ta Fourier-transformasjonen av \eqref{diffusion}.
+    \begin{equation}
+        \label{phihat}
+        \hat\phi = \mathscr F\left\{\phi\right\} = \FT{x}{\phi}
+    \end{equation}
+    Ved hjelp av \eqref{papa}:
+    \begin{equation}
+        \label{ddtphihat}
+        \begin{split}
+            \mathscr F \left\{\deldel{\phi}{t}\right\}
+                &= \FT{x}{\deldel{\phi}{t}} \\
+                &= \deldel{}{t} \left[ \FT{x}{\phi} \right] \\
+                &= \deldel{\hat\phi}{t}
+        \end{split}
+    \end{equation}
+    Frå tabell:
+    \begin{equation}
+        \label{ddxxphihat}
+        \mathscr F \left\{D\deldelN{\phi}{x}{2}\right\} = -D \omega^2 \hat \phi
+    \end{equation}
+    Ved å kombinere \eqref{phihat}, \eqref{ddtphihat} og \eqref{ddxxphihat}
+    har vi fått ei ordinær differesiallikning,
+    \[
+        \deldel{\hat\phi}{t} = -D \omega^2 \hat \phi \text,
+    \]
+    som vi kjenner løysinga til, gitt initialverdibetingelsen \eqref{generisk_phi0}:
+    \[
+        \hat \phi(\omega, t) = \hat g(\omega) e^{-Dt\omega^2} \text.
+    \]
+    høgresida er eit produkt av to Fourier-transformerte funksjonar,
+    så $\phi$ er ein konvolusjon
+    \begin{equation}
+        \label{phi_conv}
+        \phi(x, t) = \frac{g * f}{\sqrt{2\pi}} \;;\quad
+        f = \mathscr F^{-1}\left\{e^{-Dt\omega^2}\right\}
+             \text.
+    \end{equation}
+    Invers Fourier-transformasjon:
+    \begin{equation}
+        \label{Finv_of_exp}
+        \mathscr F^{-1}\left\{e^{-Dt\omega^2}\right\}
+        = \frac{1}{\sqrt{2Dt}} \exp \left( -\frac{x^2}{4Dt} \right)
+    \end{equation}
+    Slår saman \eqref{phi_conv} og \eqref{Finv_of_exp}:
+    \begin{equation}
+        \begin{split}
+            \phi(x, t) &= \frac{1}{\sqrt{2\pi} \sqrt{2 D t}}
+            \left[
+                g(x) * \exp \left( -\frac{x^2}{4Dt} \right)
+            \right] \\
+                       &= \frac{1}{\sqrt{4 \pi D t}}
+                       \smashoperator{\int\limits_{z = -\infty\mathstrut}^{z = \infty\mathstrut}}
+                       \D z \, g(z)
+                       \exp \left( -\frac{(x - z)^2}{4Dt} \right)
+        \end{split}
+    \end{equation}
+    Dette er en superposisjon av skalerte bell-kurver langs $x$-aksen.
+\end{multicols*}
+\end{document}
