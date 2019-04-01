@@ -12,6 +12,9 @@
 \usepackage{scalerel}
 \usepackage{relsize}
 
+% more powerful user-defined macros
+\usepackage{xparse}
+
 \usepackage{mathtools} % coloneqq
 \usepackage{siunitx}
 \usepackage{textcomp}
@@ -31,23 +34,70 @@
 % Custom Commands
 % ---------------
 \let\vec\mathbf
+
+\newcommand{\flatfrac}[2]{{#1}/{#2}}
+
 \newcommand{\deldel}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\deldelN}[3]{\frac{\partial^{#3} #1}{\partial #2 ^{#3}}}
-\newcommand{\dd}[2]{\frac{\mathrm d #1}{\mathrm d #2}}
-\newcommand{\textdd}[2]{{\mathrm d #1}/{\mathrm d #2}}
 \newcommand{\Tay}[3]{T_{#2}\left \{ #1 \right \}(#3)}
 \newcommand{\LRSeq}[1]{\left\{ #1 \right\}}
 \newcommand{\Seq}[1]{\big\{ #1 \big\}}
 
+%%% \argopen and \argclose creates groups without spacing
+\NewDocumentCommand\argopen{s}{
+    \IfBooleanTF{#1}{\mathopen{}\mathclose\bgroup}
+                    {\mathopen{}\mathclose\bgroup\left}
+}
+
+\NewDocumentCommand\argclose{s}{
+    \IfBooleanTF{#1}{\egroup}
+                    {\aftergroup\egroup\right}
+}
+
+\NewDocumentCommand\Differential{ o g d() }{
+    % Differential 'd'
+    % 1 o: optional n-th derivative
+    % 2 g: the (optional) thing to differentiate
+    % 3 d: the (optional) thing to differentiate, but in brackets
+    \IfNoValueTF{#2}
+        {\IfNoValueTF{#3}
+            {\mathrm d \IfNoValueTF{#1}{}{^{#1}}}
+            {\mathinner{\mathrm d \IfNoValueTF{#1}{}{^{#1}}\argopen(#3\argclose)}}}
+        {\mathinner{\mathrm d \IfNoValueTF{#1}{}{^{#1}}#2} \IfNoValueTF{#3}{}{(#3)}}
+}
+
+\NewDocumentCommand\D{}\Differential
+
+\NewDocumentCommand\Derivative{ s o m g d() }{{ %%% extra brackets for scoping
+    % 1 s: optional * if you want a flat fraction
+    % 2 o: optional n-th derivative
+    % 3 m: mandatory variable to diff. by
+    % 4 g: optional  variable to diff.
+    % 5 d: optional  variable to diff. by in brackets
+    \newcommand\Power{\IfNoValueTF{#2}{}{^{#2}}}
+    \IfBooleanTF{#1}
+        {\let\fractype\flatfrac}
+        {\let\fractype\frac}
+    \IfNoValueTF{#4}
+        {\IfNoValueTF{#5}
+            {\fractype{\mathrm d \Power }
+                      {\mathrm d #3 \Power }}
+            {\fractype{\mathrm d \Power }
+                      {\mathrm d #3 \Power } \argopen(#5\argclose) }}
+        {\fractype{\mathrm d \Power #4 }
+                  {\mathrm d #3 \Power }}
+}}
+
+\NewDocumentCommand\DD{}\Derivative
+
 %% fourier transform
 \newcommand{\FT}[2]{
     \frac{1}{\sqrt{2\pi}} \smashoperator{\int\limits_{#1=-\infty\mathstrut}^{#1=\infty\mathstrut}}
-        #2 e^{-i\omega #1} \D #1
+    \D{#1} #2 e^{-i\omega #1}
 }
 
 \newcommand{\Err}[1]{\mathrm{error}_{#1}}
 \newcommand{\Diam}{\mathrm{diam}}
-\newcommand{\D}{\mathrm{d}}
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}

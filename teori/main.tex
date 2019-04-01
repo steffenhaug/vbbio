@@ -1,13 +1,9 @@
 \documentclass[12pt]{article}
-
 \input{setup}
+
 
 \title{Initialverdi-oppgåver}
 
-\newcommand{\subtask}[1]{{\bf #1.}}
-
-\definecolor{ThemeBG}{HTML}{C1DCBD}
-\definecolor{ThemeFrame}{HTML}{000000}
 
 \begin{document}
 \maketitle
@@ -34,24 +30,22 @@
     \begin{equation}
         \delta(x) = \frac{1}{2\pi}
         \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
-        \D k e^{-ikx} \text.
+        \D k e^{-ikx}
         \label{deltafn}
     \end{equation}
     Taylor-utvikling av $\phi$ om $t = 0$:
     \begin{equation}
         \phi(x, t) = \sum_{n = 0}^\infty
         \frac{t^n}{n!} \cdot \smashoperator{\Sub\limits_{t = 0}} \deldelN{\phi}{t}{n}
-        \text.
         \label{tay}
     \end{equation}
     Leibniz' integral-regel:
     \begin{equation}
-        \dd{}{x} \left[\;
-            \smashoperator[r]{\int\limits_{k=a}^{k=b}} f(x, k) \D k
+        \DD{x} \left[\;
+            \smashoperator[r]{\int\limits_{k=a}^{k=b}} \D{k} f(x, k)
         \right]
         =
-        \smashoperator[r]{\int\limits_{k=a}^{k=b}} \deldel{f}{x} \D k
-        \text.
+        \smashoperator[r]{\int\limits_{k=a}^{k=b}} \D{k} \deldel{f}{x}
         \label{papa}
     \end{equation}
     (bytte om rekkefølga på derivasjon og integrasjon,
@@ -63,7 +57,6 @@
         \;\text;\quad
         \smashoperator{\Sub\limits_{t=0}} \deldelN{\phi}{t}{n}
         = D^n \deldelN{}{x}{2n} \delta(x)
-        \text,
         \label{diffusionN}
     \end{equation}
     som er det siste vi kjem til å få bruk for.
@@ -80,16 +73,16 @@
     \begin{align*}
         \phi(x, t) &= \sum \left[
         \frac{t^n}{n!} \frac{1}{2\pi} D^n \int
-    \D k \deldelN{}{x}{2n} e^{-ikx} \right] \\
-                   &= \frac{1}{2\pi} \sum \left[ \int \D k \frac{t^n}{n!} D^n (-ik)^{2n} e^{-ikx} \right] \\
-                   &= \frac{1}{2\pi} \int \D k e^{-ikx} \sum \left[ \frac{\left(-Dtk^2\right)^n}{n!} \right]\\
-                   &= \frac{1}{2\pi} \int \D k e^{-ikx} e^{-Dtk^2}
+    \D{k} \deldelN{}{x}{2n} e^{-ikx} \right] \\
+                   &= \frac{1}{2\pi} \sum \left[ \int \D{k} \frac{t^n}{n!} D^n (-ik)^{2n} e^{-ikx} \right] \\
+                   &= \frac{1}{2\pi} \int \D{k} e^{-ikx} \sum \left[ \frac{\left(-Dtk^2\right)^n}{n!} \right]\\
+                   &= \frac{1}{2\pi} \int \D{k} e^{-ikx} e^{-Dtk^2}
     \end{align*}
     Skriv på grensene, og gjer koordinatskiftet:
     \begin{equation}
         \phi(x, t) = \frac{1}{2\pi}
         \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
-                \D k e^{-ik(x - x_0)} e^{-Dtk^2}
+        \D{k} e^{-ik(x - x_0)} e^{-Dtk^2}
         \label{phi_int}
     \end{equation}
 
@@ -99,10 +92,10 @@
     \begin{split}
         \phi(x, t) &= \frac{1}{2\pi}
         \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
-                \D k e^{-ik(x - x_0)} e^{-Dtk^2} \\
+        \D{k} e^{-ik(x - x_0)} e^{-Dtk^2} \\
                    &= \frac{1}{2\pi}
         \smashoperator{\int\limits_{k = -\infty}^{k = \infty}}
-        \D k e^{-(ak^2 + 2bk)} \:\text;\:
+        \D{k} e^{-(ak^2 + 2bk)} \:\text;\:
         \begin{array}{l} a = Dt \\  b = \frac{i}{2}(x - x_0) \end{array} \\
                    &\stackrel{\satan}{=} \frac{1}{2\pi} \sqrt{\frac{\pi}{a}} \exp \left(\frac{b^2}{a} \right) \\
                    &= \frac{1}{\sqrt{4\pi D t}} \exp \left( -\frac{(x - x_0)^2}{4 D t} \right)
@@ -156,7 +149,7 @@
     \[
         \hat \phi(\omega, t) = \hat g(\omega) e^{-Dt\omega^2} \text.
     \]
-    høgresida er eit produkt av to Fourier-transformerte funksjonar,
+    Høgresida er eit produkt av to Fourier-transformerte funksjonar,
     så $\phi$ er ein konvolusjon
     \begin{equation}
         \label{phi_conv}
@@ -179,10 +172,11 @@
             \right] \\
                        &= \frac{1}{\sqrt{4 \pi D t}}
                        \smashoperator{\int\limits_{z = -\infty\mathstrut}^{z = \infty\mathstrut}}
-                       \D z \, g(z)
+                       \D{z} g(z)
                        \exp \left( -\frac{(x - z)^2}{4Dt} \right)
         \end{split}
     \end{equation}
     Dette er en superposisjon av skalerte bell-kurver langs $x$-aksen.
+
 \end{multicols*}
 \end{document}
